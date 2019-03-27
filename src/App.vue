@@ -1,28 +1,40 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Auth Flow</h1>
+    <ul>
+      <li>
+        <router-link v-if="loggedIn" to="/logout">Log out</router-link>
+        <router-link v-if="!loggedIn" to="/login">Log in</router-link>
+      </li>
+      <li>
+        <router-link to="/about">About</router-link>
+      </li>
+      <li>
+        <router-link to="/dashboard">Dashboard</router-link>
+        (authenticated)
+      </li>
+    </ul>
+    <template v-if="$route.matched.length">
+      <router-view></router-view>
+    </template>
+    <template v-else>
+      <p>You are logged {{ loggedIn ? 'in' : 'out' }}</p>
+    </template>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import auth from './config/auth'
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
+  data () {
+    return {
+      loggedIn: auth.loggedIn()
+    }
+  },
+  created () {
+    auth.onChange = loggedIn => {
+      this.loggedIn = loggedIn
+    }
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
