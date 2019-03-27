@@ -13,21 +13,13 @@ function requireAuth (to, from, next) {
         next()
     }
 }
-
-const afterAuth = (_to, from, next) => {
-    if (auth.loggedIn) {
-      next(from.path)
-    } else {
-      next()
-    }
-}
   
 export const router = new VueRouter({
     mode: 'history',
     base: __dirname,
     routes: [
         { path: '/dashboard', component: Dashboard, beforeEnter: requireAuth },
-        { path: '/login', component: Login,  beforeEnter: afterAuth  },
+        { path: '/login', component: Login },
         { path: '/logout', 
             beforeEnter (to, from, next) {
                 auth.logout()
